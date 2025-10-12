@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="vodo.client/vodo.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Vodo.Server/Vodo.Server.csproj" />
+</Solution>
