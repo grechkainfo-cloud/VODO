@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Vodo.Models
 {
@@ -48,10 +43,11 @@ namespace Vodo.Models
         // Related entities
         public List<JobMedia> Media { get; set; } = new(); // Photos, documents, etc.
         public List<JobComment> Comments { get; set; } = new(); // Internal notes
-        public List<Stream> Streams { get; set; } = new(); // Associated video streams
+        public List<JobStream> Streams { get; set; } = new(); // Associated video streams
 
 
-        [Timestamp] public byte[]? RowVersion { get; set; }
+        [ConcurrencyCheck]
+        public byte[]? RowVersion { get; set; }
 
 
         // Audit fields

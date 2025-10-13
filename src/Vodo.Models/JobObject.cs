@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vodo.Models
 {
@@ -27,10 +22,11 @@ namespace Vodo.Models
 
         // Navigation properties
         public List<Job> Jobs { get; set; } = new(); // All jobs related to the site
-        public List<Stream> Streams { get; set; } = new(); // Active video streams
+        public List<JobStream> Streams { get; set; } = new(); // Active video streams
 
 
-        [Timestamp] public byte[]? RowVersion { get; set; } // Concurrency control
+        [ConcurrencyCheck]
+        public byte[]? RowVersion { get; set; }
 
 
         // Audit fields

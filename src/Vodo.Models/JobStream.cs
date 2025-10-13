@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Vodo.Models
 {
-    public class Stream
+    public class JobStream
     {
         [Key] public Guid Id { get; set; }
 
 
-        public Guid? SiteId { get; set; }
-        public Site? Site { get; set; }
+        public Guid? JobObjectId { get; set; }
+        public JobObject? JobObject { get; set; }
 
 
         public Guid? JobId { get; set; }
