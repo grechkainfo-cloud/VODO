@@ -64,7 +64,9 @@ namespace Vodo.DAL.Context
                 });
 
                 // Geometry (Point) configuration for PostgreSQL
-                entity.Property(e => e.Location).HasColumnType("geometry (point)");
+                // entity.Property(e => e.Location).HasColumnType("geometry (point)");
+
+                entity.Property(e => e.Location);
 
                 // RowVersion for concurrency
                 //entity.Property(e => e.RowVersion).IsRowVersion();
@@ -110,7 +112,8 @@ namespace Vodo.DAL.Context
                       .HasConversion<string>();
 
                 // Geometry configuration for PostgreSQL
-                entity.Property(e => e.Geometry).HasColumnType("geometry");
+               // entity.Property(e => e.Geometry).HasColumnType("geometry");
+                entity.Property(e => e.Geometry);
 
                 // RowVersion for concurrency
                 //entity.Property(e => e.RowVersion).IsRowVersion();
