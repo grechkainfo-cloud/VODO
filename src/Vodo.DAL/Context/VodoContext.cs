@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Metrics;
 using Vodo.Models;
 
 namespace Vodo.DAL.Context
@@ -66,7 +65,8 @@ namespace Vodo.DAL.Context
                 // Geometry (Point) configuration for PostgreSQL
                 // entity.Property(e => e.Location).HasColumnType("geometry (point)");
 
-                entity.Property(e => e.Location);
+                entity.Property(e => e.Location)
+                .HasSrid(4326); // Указывает систему координат WGS 84 (GPS);
 
                 // RowVersion for concurrency
                 //entity.Property(e => e.RowVersion).IsRowVersion();
@@ -113,7 +113,8 @@ namespace Vodo.DAL.Context
 
                 // Geometry configuration for PostgreSQL
                // entity.Property(e => e.Geometry).HasColumnType("geometry");
-                entity.Property(e => e.Geometry);
+                entity.Property(e => e.Geometry)
+                    .HasSrid(4326); // Указывает систему координат WGS 84 (GPS)
 
                 // RowVersion for concurrency
                 //entity.Property(e => e.RowVersion).IsRowVersion();

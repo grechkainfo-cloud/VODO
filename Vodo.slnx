@@ -3,6 +3,9 @@
     <Project Path="src/Vodo.DAL/Vodo.DAL.csproj" Id="997f7220-5c1a-4308-8136-ac5c11ccd2d1" />
     <Project Path="src/Vodo.Models/Vodo.Models.csproj" Id="252b0422-ea65-434a-9e33-97ca9ee0ab1d" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Vodo.UnitTests/Vodo.UnitTests.csproj" Id="465c7780-2b1c-4e6b-b693-478f0adf8628" />
+  </Folder>
   <Project Path="vodo.client/vodo.client.esproj">
     <Build />
     <Deploy />
