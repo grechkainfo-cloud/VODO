@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 using Vodo.Models;
 
 namespace Vodo.DAL.Context
@@ -21,8 +23,13 @@ namespace Vodo.DAL.Context
 
         public DbSet<JobStream> JobStreams { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            var jsonConverter = new ValueConverter<Dictionary<string, object>, string>(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, (JsonSerializerOptions)null));
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Contractor>(entity =>
@@ -31,7 +38,9 @@ namespace Vodo.DAL.Context
                 entity.Property(e => e.Id).ValueGeneratedOnAdd(); // Автогенерация ID
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Inn).HasMaxLength(12);
-                entity.Property(e => e.Payload).HasColumnType("jsonb");
+                entity.Property(e => e.Payload)
+                  .HasConversion(jsonConverter)
+                  .HasColumnType("TEXT"); // Используем TEXT вместо jsonb
             });
 
             modelBuilder.Entity<EventLog>(entity =>
@@ -41,8 +50,10 @@ namespace Vodo.DAL.Context
                 entity.Property(e => e.Action).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Entity).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.User).HasMaxLength(100);
-                entity.Property(e => e.Payload).HasColumnType("jsonb");
-                entity.Property(e => e.Timestamp).HasDefaultValueSql("NOW()");
+                entity.Property(e => e.Payload)
+                      .HasConversion(jsonConverter)
+                      .HasColumnType("TEXT"); // Используем TEXT вместо jsonb
+                entity.Property(e => e.Timestamp); //.HasDefaultValueSql("NOW()");
             });
 
             modelBuilder.Entity<JobObject>(entity =>
@@ -132,7 +143,9 @@ namespace Vodo.DAL.Context
                 entity.Property(e => e.Id).ValueGeneratedOnAdd(); // Автогенерация ID
                 entity.Property(e => e.Url).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.Kind).HasConversion<string>();
-                entity.Property(e => e.Meta).HasColumnType("jsonb");
+                entity.Property(e => e.Meta)
+                      .HasConversion(jsonConverter)
+                      .HasColumnType("TEXT"); // Используем TEXT вместо jsonb
 
                 entity.HasOne(e => e.Job)
                       .WithMany(j => j.Media)
