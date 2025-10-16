@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\Vodo.Application\Vodo.Application.csproj" />
     <ProjectReference Include="..\src\Vodo.DAL\Vodo.DAL.csproj" />
     <ProjectReference Include="..\vodo.client\vodo.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
