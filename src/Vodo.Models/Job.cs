@@ -9,7 +9,7 @@ namespace Vodo.Models
 
 
         // Foreign keys
-        public Guid SiteId { get; set; }
+        public Guid JobObjectId { get; set; }
         public JobObject JobObject { get; set; } = default!;
 
 

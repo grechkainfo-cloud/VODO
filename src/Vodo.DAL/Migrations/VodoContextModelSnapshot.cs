@@ -41,6 +41,26 @@ namespace Vodo.DAL.Migrations
                     b.ToTable("Contractors");
                 });
 
+            modelBuilder.Entity("Vodo.Models.Division", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Geometry>("Geometry")
+                        .HasColumnType("GEOMETRY")
+                        .HasAnnotation("Sqlite:Srid", 4326);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Divisions");
+                });
+
             modelBuilder.Entity("Vodo.Models.EventLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -104,6 +124,9 @@ namespace Vodo.DAL.Migrations
                         .HasColumnType("GEOMETRY")
                         .HasAnnotation("Sqlite:Srid", 4326);
 
+                    b.Property<Guid>("JobObjectId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -112,9 +135,6 @@ namespace Vodo.DAL.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("BLOB");
-
-                    b.Property<Guid>("SiteId")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -143,7 +163,7 @@ namespace Vodo.DAL.Migrations
 
                     b.HasIndex("ContractorId");
 
-                    b.HasIndex("SiteId");
+                    b.HasIndex("JobObjectId");
 
                     b.HasIndex("StatusId");
 
@@ -221,6 +241,9 @@ namespace Vodo.DAL.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("DivisionId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Point>("Location")
                         .HasColumnType("POINT")
                         .HasAnnotation("Sqlite:Srid", 4326);
@@ -246,6 +269,8 @@ namespace Vodo.DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DivisionId");
 
                     b.ToTable("JobObjects");
                 });
@@ -302,7 +327,7 @@ namespace Vodo.DAL.Migrations
 
                     b.HasOne("Vodo.Models.JobObject", "JobObject")
                         .WithMany("Jobs")
-                        .HasForeignKey("SiteId")
+                        .HasForeignKey("JobObjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -363,6 +388,10 @@ namespace Vodo.DAL.Migrations
 
             modelBuilder.Entity("Vodo.Models.JobObject", b =>
                 {
+                    b.HasOne("Vodo.Models.Division", "Division")
+                        .WithMany()
+                        .HasForeignKey("DivisionId");
+
                     b.OwnsOne("Vodo.Models.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("JobObjectId")
@@ -397,6 +426,8 @@ namespace Vodo.DAL.Migrations
                         });
 
                     b.Navigation("Address");
+
+                    b.Navigation("Division");
                 });
 
             modelBuilder.Entity("Vodo.Models.JobStream", b =>

@@ -25,6 +25,10 @@ namespace Vodo.Models
         public List<JobStream> Streams { get; set; } = new(); // Active video streams
 
 
+        public Division? Division { get; set; }
+
+        public Guid? DivisionId { get; set;  }
+
         [ConcurrencyCheck]
         public byte[]? RowVersion { get; set; }
 

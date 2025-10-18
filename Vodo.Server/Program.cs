@@ -1,11 +1,41 @@
+using System.Text.Json.Serialization;
 using Vodo.Application;
 using Vodo.DAL;
+using Vodo.Server.SystemTextJsonConverters;
+using Vodo.Server.NewtonsoftConverters;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers()
+    /*
+    .AddJsonOptions(opts =>
+    {
+        // Разрешаем сериализацию специальных именованных значений плавающей точки
+        opts.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
 
-builder.Services.AddControllers();
+        // Игнорируем циклические ссылки при сериализации (предотвращает JsonException о циклах)
+        opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
+        // Увеличиваем максимально допустимую глубину (по умолчанию 32) — если объекты очень вложены
+        opts.JsonSerializerOptions.MaxDepth = 64;
+
+        // Не сериализуем null-значения (опционально)
+        opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        
+        // Добавляем конвертер для Geometry
+        opts.JsonSerializerOptions.Converters.Add(new GeometrySystemTextJsonConverter());
+    })
+    */
+    .AddNewtonsoftJson(opts =>
+    {
+        // Игнорируем циклы
+        opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        // Добавляем конвертер для NetTopologySuite геометрий
+        opts.SerializerSettings.Converters.Add(new GeometryNewtonsoftConverter());
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

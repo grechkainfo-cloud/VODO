@@ -23,6 +23,7 @@ namespace Vodo.DAL.Context
 
         public DbSet<JobStream> JobStreams { get; set; }
 
+        public DbSet<Division> Divisions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,15 @@ namespace Vodo.DAL.Context
                 v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, (JsonSerializerOptions)null));
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Division>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd(); // Автогенерация ID
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Geometry)
+                    .HasSrid(4326); // Указывает систему координат WGS 84 (GPS)
+            });
 
             modelBuilder.Entity<Contractor>(entity =>
             {
@@ -94,18 +104,18 @@ namespace Vodo.DAL.Context
                 entity.Property(e => e.Description).HasMaxLength(2000);
                 entity.Property(e => e.CreatedBy).HasMaxLength(100);
                 entity.Property(e => e.UpdatedBy).HasMaxLength(100);
-
+/*
                 // Relationships
                 entity.HasOne(e => e.JobObject)
                       .WithMany(jo => jo.Jobs)
-                      .HasForeignKey(e => e.SiteId)
+                      .HasForeignKey(e => e.JobObjectId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.Contractor)
                       .WithMany()
                       .HasForeignKey(e => e.ContractorId)
                       .OnDelete(DeleteBehavior.SetNull);
-
+*/
                 // Owned type PlannedActualPeriod
                 entity.OwnsOne(e => e.PlannedFact, planned =>
                 {
@@ -197,7 +207,7 @@ namespace Vodo.DAL.Context
                 .HasIndex(e => e.ContractorId);
 
             modelBuilder.Entity<Job>()
-                .HasIndex(e => e.SiteId);
+                .HasIndex(e => e.JobObjectId);
 
             modelBuilder.Entity<JobMedia>()
                 .HasIndex(e => e.JobId);
