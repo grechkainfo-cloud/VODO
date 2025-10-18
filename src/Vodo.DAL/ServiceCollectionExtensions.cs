@@ -12,13 +12,13 @@ namespace Vodo.DAL
     {
         public static void AddDAL(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<VodoContext>(options =>
+            _ = services.AddDbContext<VodoContext>(options =>
             {
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
                 var connection = new SqliteConnection(connectionString);
 
                 connection.Open();
-                               
+
 
                 connection.EnableExtensions(true);
 
@@ -28,7 +28,7 @@ namespace Vodo.DAL
 
                     //connection.LoadExtension("C:\\Users\\mgera\\Downloads\\mod_spatialite-5.1.0-win-x86\\mod_spatialite-5.1.0-win-x86\\mod_spatialite.dll");
                 }
-                catch (Exception exc)
+                catch
                 {
                     // при ошибке загрузки — логгировать/перекинуть с объяснением
                     throw new InvalidOperationException("Не удалось загрузить mod_spatialite. Проверьте наличие нативной библиотеки в выходной папке.");
